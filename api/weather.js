@@ -23,8 +23,10 @@ module.exports = async (req, res) => {
 
   const url = new URL(req.url, "http://localhost");
   const action = url.searchParams.get("action");
+  if (!action || !Object.hasOwn(endpoints, action)) {
+    return res.status(400).json({ error: "Unsupported weather action." });
+  }
   const endpoint = endpoints[action];
-  if (!endpoint) return res.status(400).json({ error: "Unsupported weather action." });
 
   const params = new URLSearchParams({ appid: apiKey });
   if (action === "current" || action === "forecast") params.set("units", "metric");
@@ -44,7 +46,9 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const upstream = await fetch(`https://api.openweathermap.org/data/2.5/${endpoint}?${params}`);
+    const upstream = await fetch(`https://api.openweathermap.org/data/2.5/${endpoint}?${params}`, {
+      signal: AbortSignal.timeout(10_000),
+    });
     const body = await upstream.json();
     return res.status(upstream.status).json(body);
   } catch {

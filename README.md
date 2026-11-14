@@ -45,6 +45,8 @@ Install the Vercel CLI and run `vercel dev` from this repository. Put `OPENWEATH
 
 Weather feeds can be delayed or unavailable. The dashboard is an informational prototype, not an emergency warning system or a substitute for official local advisories.
 
+The serverless weather proxy accepts only the documented actions, validates coordinates, keeps the provider key server-side, and times out an upstream request after 10 seconds. Run `npm test` for the proxy's input and error-path checks; no frontend build step is needed for this static dashboard.
+
 ## Project structure
 
 - `index.html` — dashboard markup

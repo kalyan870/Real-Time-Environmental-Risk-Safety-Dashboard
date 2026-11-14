@@ -1,0 +1,10 @@
+{
+  "name": "environmental-risk-safety-dashboard",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
