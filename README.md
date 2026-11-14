@@ -25,7 +25,7 @@ The OpenWeather key is read by the serverless function from `OPENWEATHER_API_KEY
 ## Deploy on Vercel
 
 1. Import this repository into Vercel.
-2. Add `OPENWEATHER_API_KEY` in the project's private environment-variable settings.
+2. Add `OPENWEATHER_API_KEY` in the project's private environment-variable settings. The UV index uses OpenWeather One Call API 3.0, so the key must have that product enabled.
 3. Deploy the project and open the generated URL. The `/api/weather` function proxies the allowed current-weather, forecast, UV, and air-pollution requests.
 
 Do not add the key to `index.html`, `script.js`, a `NEXT_PUBLIC_` variable, or Git. The previous key was present in repository history; rotate it with OpenWeather before relying on the new deployment.
@@ -44,6 +44,8 @@ Install the Vercel CLI and run `vercel dev` from this repository. Put `OPENWEATH
 - Theme toggle and a date/time-based outdoor planning panel
 
 Weather feeds can be delayed or unavailable. The dashboard is an informational prototype, not an emergency warning system or a substitute for official local advisories.
+
+The serverless weather proxy accepts only the documented actions, validates coordinates, keeps the provider key server-side, and times out an upstream request after 10 seconds. UV data comes from One Call API 3.0; the retired legacy UV endpoint is not used. Run `npm test` for the proxy's input and error-path checks; no frontend build step is needed for this static dashboard.
 
 ## Project structure
 
