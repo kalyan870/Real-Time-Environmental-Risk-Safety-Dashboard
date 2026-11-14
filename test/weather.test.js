@@ -53,6 +53,14 @@ test("rejects invalid coordinates before calling the provider", async () => {
   assert.equal(res.statusCode, 400);
 });
 
+test("requires explicit coordinates rather than treating missing values as zero", async () => {
+  process.env.OPENWEATHER_API_KEY = "test-only-key";
+  global.fetch = async () => assert.fail("provider must not be called without coordinates");
+  const res = response();
+  await handler({ method: "GET", url: "/api/weather?action=forecast" }, res);
+  assert.equal(res.statusCode, 400);
+});
+
 test("proxies only the fixed provider host and times out", async () => {
   process.env.OPENWEATHER_API_KEY = "test-only-key";
   let requestedUrl;
@@ -69,4 +77,19 @@ test("proxies only the fixed provider host and times out", async () => {
   assert.equal(requestedUrl.hostname, "api.openweathermap.org");
   assert.equal(requestedUrl.searchParams.get("q"), "Delhi,IN");
   assert.ok(requestOptions.signal instanceof AbortSignal);
+});
+
+test("reads UV from the supported One Call API 3.0 current payload", async () => {
+  process.env.OPENWEATHER_API_KEY = "test-only-key";
+  let requestedUrl;
+  global.fetch = async (url) => {
+    requestedUrl = new URL(url);
+    return { status: 200, json: async () => ({ current: { uvi: 4.2 } }) };
+  };
+  const res = response();
+  await handler({ method: "GET", url: "/api/weather?action=uvi&lat=17.7&lon=83.2" }, res);
+  assert.equal(res.statusCode, 200);
+  assert.deepEqual(res.body, { value: 4.2 });
+  assert.equal(requestedUrl.pathname, "/data/3.0/onecall");
+  assert.equal(requestedUrl.searchParams.get("exclude"), "minutely,hourly,daily,alerts");
 });
