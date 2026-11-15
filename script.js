@@ -63,21 +63,21 @@ function loadByCity(city) {
     });
 }
 
-// MAIN
+// MAINfunction safeWeatherIcon(value) {  return typeof value === 'string' && /^\d{2}[dn]$/.test(value) ? value : '01d';}function escapeHtml(value) {  const span = document.createElement('span');  span.textContent = String(value ?? '');  return span.innerHTML;}
 function loadAllData() {
   fetch(`/api/weather?action=current&lat=${lat}&lon=${lon}`)
     .then(r => r.json())
     .then(d => {
       document.getElementById('weatherInfo').classList.remove('hidden');
       document.getElementById('currentIcon').innerHTML =
-        `<img src="https://openweathermap.org/img/wn/${d.weather[0].icon}@4x.png">`;
+        `<img src="https://openweathermap.org/img/wn/${safeWeatherIcon(d.weather[0].icon)}@4x.png">`;
       document.getElementById('temp').innerHTML =
         `${Math.round(d.main.temp)}°C<br><small>Feels like ${Math.round(d.main.feels_like)}°C</small>`;
       document.getElementById('minMax').innerHTML =
         `Today: ${Math.round(d.main.temp_min)}° – ${Math.round(d.main.temp_max)}°`;
       document.getElementById('description').textContent = d.weather[0].description;
       document.getElementById('location').innerHTML =
-        `${d.name}, ${d.sys.country}<br>
+        `${escapeHtml(d.name)}, ${escapeHtml(d.sys.country)}<br>
          <small>Sunrise ${new Date(d.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
          • Sunset ${new Date(d.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>`;
       document.getElementById('humidity').textContent = d.main.humidity;
@@ -218,7 +218,7 @@ function loadAllData() {
           f.list.slice(0,8).forEach(i => {
             h.innerHTML += `<div class="hour-card">
               <div>${new Date(i.dt*1000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
-              <img src="https://openweathermap.org/img/wn/${i.weather[0].icon}@2x.png">
+              <img src="https://openweathermap.org/img/wn/${safeWeatherIcon(i.weather[0].icon)}@2x.png">
               <div>${Math.round(i.main.temp)}°</div>
               <div class="rain-chance">${Math.round((i.pop||0)*100)}% rain</div>
             </div>`;
@@ -238,7 +238,7 @@ function loadAllData() {
             let ic = Object.keys(days[day].icon).sort((a,b)=>days[day].icon[b]-days[day].icon[a])[0];
             daily.innerHTML += `<div class="day-card">
               <div class="day">${day}</div>
-              <img src="https://openweathermap.org/img/wn/${ic}@2x.png">
+              <img src="https://openweathermap.org/img/wn/${safeWeatherIcon(ic)}@2x.png">
               <div class="temps"><span class="high">${high}°</span> / <span class="low">${low}°</span></div>
             </div>`;
           });
@@ -313,4 +313,4 @@ function shareWeather() {
 }
 
 // Auto load
-window.onload = () => getLocationWeather();
+window.onload = () => getLocationWeather();
