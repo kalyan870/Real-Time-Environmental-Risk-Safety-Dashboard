@@ -166,7 +166,12 @@ function loadAllData() {
           alertCard.style.background = 'linear-gradient(135deg, #ff4757, #c44569)';
           alertCard.style.color = 'white';
           alertCard.style.border = 'none';
-          alertCard.innerHTML = `<strong>🚨 Active Weather Alerts</strong><br>${alerts.join("<br>")}`;
+          const alertHeading = document.createElement('strong');
+          alertHeading.textContent = 'Active Weather Alerts';
+          const alertDetails = document.createElement('div');
+          alertDetails.style.whiteSpace = 'pre-line';
+          alertDetails.textContent = alerts.join('\n');
+          alertCard.append(alertHeading, document.createElement('br'), alertDetails);
           document.getElementById('extraFeatures').insertBefore(alertCard, document.getElementById('extraFeatures').firstChild);
         } else {
           document.getElementById('alertBanner').classList.add('hidden');
@@ -188,7 +193,12 @@ function loadAllData() {
         if (cautions.length > 0) {
           const cautionDiv = document.createElement('div');
           cautionDiv.className = 'extra-feature';
-          cautionDiv.innerHTML = `<strong>⚠️ Health Cautions</strong><br>${cautions.join("<br>")}`;
+          const cautionHeading = document.createElement('strong');
+          cautionHeading.textContent = 'Health Cautions';
+          const cautionDetails = document.createElement('div');
+          cautionDetails.style.whiteSpace = 'pre-line';
+          cautionDetails.textContent = cautions.join('\n');
+          cautionDiv.append(cautionHeading, document.createElement('br'), cautionDetails);
           document.getElementById('extraFeatures').appendChild(cautionDiv);
         }
       });
