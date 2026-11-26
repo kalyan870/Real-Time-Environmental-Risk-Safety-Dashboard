@@ -1,6 +1,7 @@
 # Environmental Risk & Safety Dashboard
 
 <p align="center"><strong>A responsive weather and outdoor-risk dashboard for checking current conditions, forecast, air quality, UV index, and rain radar.</strong></p>
+**Live link:** [https://instant-forecast.netlify.app/](https://instant-forecast.netlify.app/)
 
 <p align="center">HTML · CSS · JavaScript · OpenWeather · Windy radar</p>
 
@@ -9,6 +10,11 @@
 Search for a location or use browser geolocation to load weather conditions. The dashboard adds forecast cards, UV and air-quality indicators, saved favorite locations, theme switching, and a travel planner. Rain radar is embedded from Windy.
 
 ## Architecture
+
+![Real-Time-Environmental-Risk-Safety-Dashboard architecture map](docs/images/real-time-environmental-risk-safety-dashboard-architecture.png)
+
+[Architecture notes](docs/architecture.md) · [Editable SVG](docs/images/real-time-environmental-risk-safety-dashboard-architecture.svg)
+
 
 ```mermaid
 flowchart LR
